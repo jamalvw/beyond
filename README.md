@@ -1,5 +1,5 @@
 # beyond
-####A Discord Hackweek project.
+A Discord Hackweek project.
 
 beyond is a game built in Discord about acquiring loot and never being able to reach the end.
 
