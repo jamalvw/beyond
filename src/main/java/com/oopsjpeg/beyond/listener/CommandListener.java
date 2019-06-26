@@ -33,7 +33,7 @@ public class CommandListener implements Listener {
 
             if (command != null) {
                 if (command.isRegisteredOnly() && !Beyond.getInstance().hasUser(author))
-                    Util.sendError(channel, author, "You must be registered to use this command.");
+                    Util.sendFailure(channel, author, "You must be registered to use this command.");
                 else
                     command.execute(message, alias, args);
             }

@@ -57,12 +57,16 @@ public class UserData {
         setHealth(getHealth() + health);
     }
 
+    public void removeHealth(int health) {
+        setHealth(getHealth() - health);
+    }
+
     public int getMaxHealth() {
-        return 100 + (level * 12) + (hasArmor() ? armor.getHealth() : 0);
+        return 100 + ((level - 1) * 5) + (hasArmor() ? armor.getHealth() : 0);
     }
 
     public int getDamage() {
-        return 10 + (level * 3) + (hasWeapon() ? weapon.getDamage() : 0);
+        return 10 + (level - 1) + (hasWeapon() ? weapon.getDamage() : 0);
     }
 
     public int getLevel() {
@@ -98,7 +102,7 @@ public class UserData {
     }
 
     public int getMaxXp() {
-        return (int) Math.pow(65 + level * 30, 1.14);
+        return (int) Math.pow(65 + (level - 1) * 70, 1.14);
     }
 
     public int getGold() {

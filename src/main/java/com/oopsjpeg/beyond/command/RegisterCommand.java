@@ -21,7 +21,7 @@ public class RegisterCommand implements Command {
             Beyond.getInstance().getMongo().saveUser(data);
             Util.sendSuccess(channel, author, "Welcome to **Beyond**!");
         } else {
-            Util.sendError(channel, author, "You are already registered.");
+            Util.sendFailure(channel, author, "You are already registered.");
         }
     }
 

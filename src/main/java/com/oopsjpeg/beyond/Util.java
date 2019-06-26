@@ -5,6 +5,7 @@ import discord4j.core.object.entity.User;
 import discord4j.core.spec.EmbedCreateSpec;
 
 import java.awt.*;
+import java.text.DecimalFormat;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.Random;
@@ -45,6 +46,10 @@ public class Util {
         return stack.stream().limit(3).collect(Collectors.joining(" "));
     }
 
+    public static String comma(int value) {
+        return new DecimalFormat("#,###").format(value);
+    }
+
     public static Consumer<? super EmbedCreateSpec> embed(User user, String title, String description, Color color) {
         return e -> e
                 .setAuthor(user.getUsername() + "#" + user.getDiscriminator(), null, user.getAvatarUrl())
@@ -61,8 +66,12 @@ public class Util {
         channel.createMessage(m -> m.setEmbed(embed(user, title, content, Color.CYAN))).block();
     }
 
-    public static void sendError(MessageChannel channel, User user, String content) {
+    public static void sendFailure(MessageChannel channel, User user, String content) {
         channel.createMessage(m -> m.setEmbed(embed(user, "", content, new Color(221, 46, 68)))).block();
+    }
+
+    public static void sendFailure(MessageChannel channel, User user, String title, String content) {
+        channel.createMessage(m -> m.setEmbed(embed(user, title, content, new Color(221, 46, 68)))).block();
     }
 
     public static void sendSuccess(MessageChannel channel, User user, String content) {

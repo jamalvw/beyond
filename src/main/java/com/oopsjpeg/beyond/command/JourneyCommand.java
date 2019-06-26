@@ -19,9 +19,12 @@ public class JourneyCommand implements Command {
         UserData data = Beyond.getInstance().getUser(author);
 
         if (data.hasJourney()) {
-            Util.sendError(channel, author, "You are already on a journey.");
+            Util.sendFailure(channel, author, "You are already on a journey.");
+        } else if (data.getHealth() <= data.getMaxHealth() * 0.1f) {
+            Util.sendFailure(channel, author, "You're too low on health to start a journey.\nWait a while to regenerate health or use an item.");
         } else {
-            Journey journey = new Journey(1, 1);
+            int level = args.length >= 1 ? Math.max(0, Math.min(data.getLevel(), Integer.parseInt(args[0]))) : data.getLevel();
+            Journey journey = new Journey(level, Math.round(Math.max(1, data.getLevel() * 0.5f)));
             journey.start(data);
 
             channel.createMessage(m -> m.setEmbed(e -> {
