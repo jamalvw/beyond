@@ -6,8 +6,8 @@ import com.oopsjpeg.beyond.command.AccountCommand;
 import com.oopsjpeg.beyond.command.JourneyCommand;
 import com.oopsjpeg.beyond.command.RegisterCommand;
 import com.oopsjpeg.beyond.listener.CommandListener;
-import com.oopsjpeg.beyond.listener.JourneyListener;
 import com.oopsjpeg.beyond.listener.ReadyListener;
+import com.oopsjpeg.beyond.listener.UserListener;
 import com.oopsjpeg.beyond.object.discord.UserData;
 import discord4j.core.DiscordClient;
 import discord4j.core.DiscordClientBuilder;
@@ -69,7 +69,7 @@ public class Beyond {
 
                 // Add listeners
                 addListener(new ReadyListener());
-                addListener(new JourneyListener());
+                addListener(new UserListener());
                 addListener(new CommandListener());
 
                 // Add commands

@@ -17,6 +17,7 @@ public class RegisterCommand implements Command {
         if (!Beyond.getInstance().hasUser(author)) {
             UserData data = Beyond.getInstance().registerUser(author.getId().asLong());
             data.setLevel(1);
+            data.heal();
             Beyond.getInstance().getMongo().saveUser(data);
             Util.sendSuccess(channel, author, "Welcome to **Beyond**!");
         } else {

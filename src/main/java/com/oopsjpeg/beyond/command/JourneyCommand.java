@@ -9,6 +9,8 @@ import discord4j.core.object.entity.Message;
 import discord4j.core.object.entity.MessageChannel;
 import discord4j.core.object.entity.User;
 
+import java.awt.*;
+
 public class JourneyCommand implements Command {
     @Override
     public void execute(Message message, String alias, String[] args) {
@@ -21,9 +23,21 @@ public class JourneyCommand implements Command {
         } else {
             Journey journey = new Journey(1, 1);
             journey.start(data);
-            Util.send(channel, author, "Your journey has begun.",
-                    "Duration: About **" + Util.timeDiff(journey.getStartTIme(), journey.getStartTIme().plusMinutes(journey.getDuration())) + "**\n" +
-                            "Level: **" + journey.getLevel() + "**");
+
+            channel.createMessage(m -> m.setEmbed(e -> {
+                e.setColor(Color.YELLOW);
+                e.setAuthor(author.getUsername() + "#" + author.getDiscriminator(), null, author.getAvatarUrl());
+                e.setTitle("Journey Start");
+                e.setDescription("__Good luck!__\n\n"
+                        + "Journey Level: **" + journey.getLevel() + "**\n"
+                        + "Duration: **" + Util.timeDiff(journey.getStartTIme(), journey.getStartTIme().plusMinutes(journey.getDuration())) + "**");
+
+                e.addField("Stats", "Health: **" + data.getHealth() + " / " + data.getMaxHealth() + "**\n"
+                        + "Damage: **" + data.getDamage() + "**", true);
+                e.addField("Armor", (data.hasArmor() ? data.getArmor().getHealth() + " Health" : "None"), true);
+                e.addField("Weapon", (data.hasWeapon() ? data.getWeapon().getDamage() + " Damage" : "None"), true);
+            })).block();
+
             Beyond.getInstance().getMongo().saveUser(data);
         }
     }

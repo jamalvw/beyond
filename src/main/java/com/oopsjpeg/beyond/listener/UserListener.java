@@ -10,13 +10,16 @@ import discord4j.core.event.domain.lifecycle.ReadyEvent;
 import java.time.LocalDateTime;
 import java.util.concurrent.TimeUnit;
 
-public class JourneyListener implements Listener {
+public class UserListener implements Listener {
     @Override
     public void register(DiscordClient client) {
         client.getEventDispatcher().on(ReadyEvent.class).subscribe(this::onReady);
     }
 
     private void onReady(ReadyEvent event) {
+        Beyond.SCHEDULER.scheduleAtFixedRate(() -> Beyond.getInstance().getUsers().values().stream()
+                .filter(UserData::canHeal)
+                .forEach(data -> data.addHealth(Math.round(data.getMaxHealth() * 0.2f))), 5, 5, TimeUnit.MINUTES);
         Beyond.SCHEDULER.scheduleAtFixedRate(() -> Beyond.getInstance().getUsers().values().stream()
                 .filter(UserData::hasJourney)
                 .filter(data -> LocalDateTime.now().isAfter(data.getJourney().getStartTIme().plusSeconds(data.getJourney().getDuration())))
@@ -26,11 +29,11 @@ public class JourneyListener implements Listener {
                     data.addGold(gold);
                     data.addXp(xp);
                     data.setJourney(null);
-                    Util.sendSuccess(data.getUser().getPrivateChannel().block(), data.getUser(), "Journey Successful",
+                    Util.sendSuccess(data.getUser().getPrivateChannel().block(), data.getUser(), "Journey Success",
                             "Gold: **" + gold + "**\n"
                                     + "XP: **" + xp + "**");
                     Beyond.getInstance().getMongo().saveUser(data);
                 }), 0, 10, TimeUnit.SECONDS);
-        Beyond.LOGGER.info("Started journey watcher.");
+        Beyond.LOGGER.info("Started user watcher.");
     }
 }
