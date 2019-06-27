@@ -10,6 +10,7 @@ import discord4j.core.object.entity.MessageChannel;
 import discord4j.core.object.entity.User;
 
 import java.awt.*;
+import java.time.LocalDateTime;
 
 public class AccountCommand implements Command {
     @Override
@@ -20,20 +21,30 @@ public class AccountCommand implements Command {
         Journey journey = data.getJourney();
 
         channel.createMessage(m -> m.setEmbed(e -> {
-            e.setColor(Color.CYAN);
+            // Set color based on health
+            if (data.getHealth() <= data.getMaxHealth() * 0.2f)
+                e.setColor(Color.RED);
+            else if (data.getHealth() <= data.getMaxHealth() * 0.4f)
+                e.setColor(new Color(1, 0.3f, 0));
+            else if (data.getHealth() <= data.getMaxHealth() * 0.8f)
+                e.setColor(Color.YELLOW);
+            else
+                e.setColor(Color.GREEN);
+
             e.setAuthor(author.getUsername() + "#" + author.getDiscriminator(), null, author.getAvatarUrl());
             e.setDescription("Level: **" + data.getLevel() + "** (" + data.getXp() + " / " + data.getMaxXp() + ")\n"
-                    + "Gold: **" + data.getGold() + "**");
+                    + "Gold: **" + data.getGold() + "**\n"
+                    + "Health: **" + data.getHealth() + " / " + data.getMaxHealth() + "**\n"
+                    + "Damage: **" + data.getDamage() + "**");
 
-            e.addField("Stats", "Health: **" + data.getHealth() + " / " + data.getMaxHealth() + "**\n"
-                    + "Damage: **" + data.getDamage() + "**", true);
-
-            e.addField("Armor", data.hasArmor() ? data.getArmor().getHealth() + " Health" : "None", true);
-            e.addField("Weapon", data.hasWeapon() ? data.getWeapon().getDamage() + " Damage" : "None", true);
+            e.addField("Armor", data.hasArmor() ? "[`" + data.getArmor().getId() + "`] " + data.getArmor().getHealth() + " Health" : "None", true);
+            e.addField("Weapon", data.hasWeapon() ? "[`" + data.getWeapon().getId() + "`] " + data.getWeapon().getDamage() + " Damage" : "None", true);
             e.addField("Item(s)", String.valueOf(data.getItems().size()), true);
 
             if (data.hasJourney())
-                e.addField("Journey", Util.timeDiff(journey.getStartTIme(), journey.getStartTIme().plusMinutes(journey.getDuration())) + " left", true);
+                e.addField("Journey", Util.timeDiff(LocalDateTime.now(), journey.getStartTIme().plusMinutes(journey.getDuration())) + " left", true);
+
+            e.setFooter("View items with '" + Beyond.getInstance().getPrefix() + "items'.", null);
         })).block();
     }
 

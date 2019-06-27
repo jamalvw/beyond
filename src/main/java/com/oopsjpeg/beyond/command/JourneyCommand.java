@@ -19,26 +19,24 @@ public class JourneyCommand implements Command {
         UserData data = Beyond.getInstance().getUser(author);
 
         if (data.hasJourney()) {
-            Util.sendFailure(channel, author, "You are already on a journey.");
+            Util.sendFailure(channel, author, "You're already on a journey.");
         } else if (data.getHealth() <= data.getMaxHealth() * 0.1f) {
             Util.sendFailure(channel, author, "You're too low on health to start a journey.\nWait a while to regenerate health or use an item.");
         } else {
-            int level = args.length >= 1 ? Math.max(0, Math.min(data.getLevel(), Integer.parseInt(args[0]))) : data.getLevel();
-            Journey journey = new Journey(level, Math.round(Math.max(1, data.getLevel() * 0.5f)));
+            int level = args.length >= 1 ? Math.max(1, Math.min(data.getLevel(), Integer.parseInt(args[0]))) : data.getLevel();
+            Journey journey = new Journey(level, Math.round(Math.max(1, level * 0.65f)));
             journey.start(data);
 
             channel.createMessage(m -> m.setEmbed(e -> {
                 e.setColor(Color.CYAN);
                 e.setAuthor(author.getUsername() + "#" + author.getDiscriminator(), null, author.getAvatarUrl());
                 e.setTitle("Journey Start");
-                e.setDescription("__Good luck!__\n\n"
-                        + "Journey Level: **" + journey.getLevel() + "**\n"
-                        + "Duration: **" + Util.timeDiff(journey.getStartTIme(), journey.getStartTIme().plusMinutes(journey.getDuration())) + "**");
-
-                e.addField("Stats", "Health: **" + data.getHealth() + " / " + data.getMaxHealth() + "**\n"
-                        + "Damage: **" + data.getDamage() + "**", true);
-                e.addField("Armor", data.hasArmor() ? data.getArmor().getHealth() + " Health" : "None", true);
-                e.addField("Weapon", data.hasWeapon() ? data.getWeapon().getDamage() + " Damage" : "None", true);
+                e.setDescription("Journey Level: **" + journey.getLevel() + "**\n"
+                        + "Duration: **" + Util.timeDiff(journey.getStartTIme(), journey.getStartTIme().plusMinutes(journey.getDuration())) + "**\n"
+                        + "Health: **" + data.getHealth() + " / " + data.getMaxHealth() + "**\n"
+                        + "Damage: **" + data.getDamage() + "**");
+                e.addField("Armor", data.hasArmor() ? "[`" + data.getArmor().getId() + "`] " + data.getArmor().getHealth() + " Health" : "None", true);
+                e.addField("Weapon", data.hasWeapon() ? "[`" + data.getWeapon().getId() + "`] " + data.getWeapon().getDamage() + " Damage" : "None", true);
             })).block();
 
             Beyond.getInstance().getMongo().saveUser(data);

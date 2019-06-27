@@ -2,13 +2,12 @@ package com.oopsjpeg.beyond;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.oopsjpeg.beyond.command.AccountCommand;
-import com.oopsjpeg.beyond.command.ItemsCommand;
-import com.oopsjpeg.beyond.command.JourneyCommand;
-import com.oopsjpeg.beyond.command.RegisterCommand;
+import com.oopsjpeg.beyond.command.*;
+import com.oopsjpeg.beyond.json.InterfaceAdapter;
 import com.oopsjpeg.beyond.listener.CommandListener;
 import com.oopsjpeg.beyond.listener.ReadyListener;
 import com.oopsjpeg.beyond.listener.UserListener;
+import com.oopsjpeg.beyond.object.Item;
 import com.oopsjpeg.beyond.object.discord.UserData;
 import discord4j.core.DiscordClient;
 import discord4j.core.DiscordClientBuilder;
@@ -24,7 +23,9 @@ import java.util.concurrent.ScheduledExecutorService;
 
 public class Beyond {
     public static final Logger LOGGER = LoggerFactory.getLogger(Beyond.class);
-    public static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
+    public static final Gson GSON = new GsonBuilder()
+            .registerTypeAdapter(Item.class, new InterfaceAdapter<Item>())
+            .setPrettyPrinting().create();
     public static final ScheduledExecutorService SCHEDULER = Executors.newScheduledThreadPool(Runtime.getRuntime().availableProcessors() + 1);
 
     private static Beyond instance;
@@ -78,6 +79,8 @@ public class Beyond {
                 addCommand(new ItemsCommand());
                 addCommand(new JourneyCommand());
                 addCommand(new RegisterCommand());
+                addCommand(new SellCommand());
+                addCommand(new UseCommand());
 
                 // Log in client
                 client.login().block();
@@ -85,6 +88,10 @@ public class Beyond {
         } catch (IOException error) {
             error.printStackTrace();
         }
+    }
+
+    public String getPrefix() {
+        return settings.get(Settings.PREFIX);
     }
 
     public void addListener(Listener listener) {
