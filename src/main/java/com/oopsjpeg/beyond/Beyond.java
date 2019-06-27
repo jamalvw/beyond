@@ -3,6 +3,7 @@ package com.oopsjpeg.beyond;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.oopsjpeg.beyond.command.AccountCommand;
+import com.oopsjpeg.beyond.command.ItemsCommand;
 import com.oopsjpeg.beyond.command.JourneyCommand;
 import com.oopsjpeg.beyond.command.RegisterCommand;
 import com.oopsjpeg.beyond.listener.CommandListener;
@@ -74,6 +75,7 @@ public class Beyond {
 
                 // Add commands
                 addCommand(new AccountCommand());
+                addCommand(new ItemsCommand());
                 addCommand(new JourneyCommand());
                 addCommand(new RegisterCommand());
 

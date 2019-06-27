@@ -20,7 +20,7 @@ public class AccountCommand implements Command {
         Journey journey = data.getJourney();
 
         channel.createMessage(m -> m.setEmbed(e -> {
-            e.setColor(Color.ORANGE);
+            e.setColor(Color.CYAN);
             e.setAuthor(author.getUsername() + "#" + author.getDiscriminator(), null, author.getAvatarUrl());
             e.setDescription("Level: **" + data.getLevel() + "** (" + data.getXp() + " / " + data.getMaxXp() + ")\n"
                     + "Gold: **" + data.getGold() + "**");
@@ -28,9 +28,9 @@ public class AccountCommand implements Command {
             e.addField("Stats", "Health: **" + data.getHealth() + " / " + data.getMaxHealth() + "**\n"
                     + "Damage: **" + data.getDamage() + "**", true);
 
-            e.addField("Armor", (data.hasArmor() ? data.getArmor().getHealth() + " Health" : "None"), true);
-            e.addField("Weapon", (data.hasWeapon() ? data.getWeapon().getDamage() + " Damage" : "None"), true);
-            e.addField("Total Item(s)", String.valueOf(data.getItems().size()), true);
+            e.addField("Armor", data.hasArmor() ? data.getArmor().getHealth() + " Health" : "None", true);
+            e.addField("Weapon", data.hasWeapon() ? data.getWeapon().getDamage() + " Damage" : "None", true);
+            e.addField("Item(s)", String.valueOf(data.getItems().size()), true);
 
             if (data.hasJourney())
                 e.addField("Journey", Util.timeDiff(journey.getStartTIme(), journey.getStartTIme().plusMinutes(journey.getDuration())) + " left", true);

@@ -28,7 +28,7 @@ public class JourneyCommand implements Command {
             journey.start(data);
 
             channel.createMessage(m -> m.setEmbed(e -> {
-                e.setColor(Color.YELLOW);
+                e.setColor(Color.CYAN);
                 e.setAuthor(author.getUsername() + "#" + author.getDiscriminator(), null, author.getAvatarUrl());
                 e.setTitle("Journey Start");
                 e.setDescription("__Good luck!__\n\n"
@@ -37,8 +37,8 @@ public class JourneyCommand implements Command {
 
                 e.addField("Stats", "Health: **" + data.getHealth() + " / " + data.getMaxHealth() + "**\n"
                         + "Damage: **" + data.getDamage() + "**", true);
-                e.addField("Armor", (data.hasArmor() ? data.getArmor().getHealth() + " Health" : "None"), true);
-                e.addField("Weapon", (data.hasWeapon() ? data.getWeapon().getDamage() + " Damage" : "None"), true);
+                e.addField("Armor", data.hasArmor() ? data.getArmor().getHealth() + " Health" : "None", true);
+                e.addField("Weapon", data.hasWeapon() ? data.getWeapon().getDamage() + " Damage" : "None", true);
             })).block();
 
             Beyond.getInstance().getMongo().saveUser(data);

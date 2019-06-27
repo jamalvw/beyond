@@ -5,6 +5,11 @@ import com.oopsjpeg.beyond.object.Item;
 public class Weapon implements Item {
     private int damage;
 
+    @Override
+    public String getName() {
+        return "Weapon";
+    }
+
     public int getDamage() {
         return damage;
     }
