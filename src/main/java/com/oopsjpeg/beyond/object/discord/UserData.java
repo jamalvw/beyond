@@ -37,6 +37,13 @@ public class UserData {
         return health < getMaxHealth();
     }
 
+    public int nextItemId() {
+        for (int id = 0; id < items.size(); id++) {
+            if (getItemById(id) == null) return id;
+        }
+        return items.size();
+    }
+
     public long getId() {
         return id;
     }
@@ -102,7 +109,7 @@ public class UserData {
     }
 
     public int getMaxXp() {
-        return (int) Math.pow(65 + (level - 1) * 70, 1.14);
+        return (int) Math.pow(75 + (level - 1) * 125, 1.15);
     }
 
     public int getGold() {
@@ -123,6 +130,10 @@ public class UserData {
 
     public void setItems(List<Item> items) {
         this.items = items;
+    }
+
+    public Item getItemById(int id) {
+        return items.stream().filter(i -> i.getId() == id).findAny().orElse(null);
     }
 
     public Armor getArmor() {

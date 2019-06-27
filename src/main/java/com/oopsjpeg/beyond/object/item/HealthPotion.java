@@ -3,11 +3,10 @@ package com.oopsjpeg.beyond.object.item;
 import com.oopsjpeg.beyond.object.Item;
 import com.oopsjpeg.beyond.object.discord.UserData;
 
-public class Armor implements Item {
+public class HealthPotion implements Item {
     private int id;
-    private int health;
 
-    public Armor(int id) {
+    public HealthPotion(int id) {
         this.id = id;
     }
 
@@ -18,12 +17,7 @@ public class Armor implements Item {
 
     @Override
     public String getName() {
-        return "Armor (+" + getHealth() + " Health)";
-    }
-
-    @Override
-    public void onUse(UserData data) {
-        data.setArmor(this);
+        return "Health Potion";
     }
 
     @Override
@@ -31,11 +25,13 @@ public class Armor implements Item {
         return true;
     }
 
-    public int getHealth() {
-        return health;
+    @Override
+    public void onUse(UserData data) {
+        data.addHealth(Math.round(data.getHealth() * 0.15f));
     }
 
-    public void setHealth(int health) {
-        this.health = health;
+    @Override
+    public boolean removeOnUse() {
+        return true;
     }
 }

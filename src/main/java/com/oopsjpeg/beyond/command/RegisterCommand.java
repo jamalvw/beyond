@@ -19,9 +19,10 @@ public class RegisterCommand implements Command {
             data.setLevel(1);
             data.heal();
             Beyond.getInstance().getMongo().saveUser(data);
-            Util.sendSuccess(channel, author, "Welcome to **Beyond**!");
+            Util.sendSuccess(channel, author, "Welcome to **Beyond**!\n"
+                    + "Begin a journey with `" + Beyond.getInstance().getPrefix() + "journey`.");
         } else {
-            Util.sendFailure(channel, author, "You are already registered.");
+            Util.sendFailure(channel, author, "You're already registered.");
         }
     }
 
